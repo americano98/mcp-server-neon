@@ -112,7 +112,7 @@ describe('renderConsentHtml', () => {
     });
 
     expect(html).toContain(
-      '<summary><span>App details · cursor.com → 127.0.0.1:1</span></summary>',
+      '<summary><span class="app-details-title">App details</span><span class="client-summary">cursor.com / 127.0.0.1:1</span></summary>',
     );
     expect(html).toContain('<details class="client-verify">');
     expect(html).not.toContain('<details class="client-verify" open>');
@@ -139,7 +139,7 @@ describe('renderConsentHtml', () => {
     });
 
     expect(html).toContain(
-      '<summary><span>App details · cursor.com → 127.0.0.1:1, cursor.com</span></summary>',
+      '<summary><span class="app-details-title">App details</span><span class="client-summary">cursor.com / 127.0.0.1:1, cursor.com</span></summary>',
     );
     expect(html).toContain('http://127.0.0.1:1/callback');
     expect(html).toContain('https://cursor.com/oauth/callback');
@@ -174,7 +174,7 @@ describe('renderConsentHtml', () => {
     });
 
     expect(html).toContain(
-      '<summary><span>App details · Redirects to 127.0.0.1:1</span></summary>',
+      '<summary><span class="app-details-title">App details</span><span class="client-summary">Redirects to 127.0.0.1:1</span></summary>',
     );
   });
 
@@ -253,21 +253,23 @@ describe('renderConsentHtml', () => {
     expect(html).toContain('name="category"');
     expect(html).toContain('data-category-select-all');
     expect(html).toContain('data-category-clear-all');
-    expect(html).toContain('>Clear categories</button>');
+    expect(html).toContain('>Clear all</button>');
     expect(html).not.toContain(
       'With all projects selected, Search and Fetch remain available.',
     );
-    expect(html).toContain('Allow writes');
+    expect(html).toContain('Read and write');
     expect(html).toContain(
       'Allow changes through tools in the selected project scope and categories shown above.',
     );
-    expect(html).toContain('src="/favicon.svg"');
-    expect(html).toContain('>View tools</button>');
+    expect(html).toContain('src="/images/consent/neon.svg"');
+    expect(html).toContain('>Included tools</button>');
     expect(html).toContain('is-collapsed');
-    expect(html).toContain('113 tools · 13 groups');
+    expect(html).toContain('113 tools available');
     expect(html).toContain('data-tool-content');
     expect(html).toContain('data-category-disclosure');
-    expect(html).toContain('data-category-summary>All selected</span>');
+    expect(html).toContain(
+      'data-category-summary>12/12 selected · 113 tools available</span>',
+    );
     expect(html).toContain('choice-categories');
     expect(html).not.toMatch(/\.check-grid\s*\{[^}]*overflow-y/);
     expect(html).toMatch(/\.card-body\s*\{[^}]*overflow-y:\s*auto/);
@@ -275,7 +277,7 @@ describe('renderConsentHtml', () => {
       /\.check-grid\s*\{[^}]*grid-template-columns:\s*repeat\(2/,
     );
     expect(html).toMatch(
-      /<div class="card-body"[^>]*>\s*<header class="consent-header">/,
+      /<header class="consent-header">[\s\S]*?<div class="card-body"/,
     );
     expect(html).not.toContain('history.replaceState');
   });
@@ -318,7 +320,7 @@ describe('renderConsentHtml', () => {
     expect(input?.[0]).not.toContain('disabled');
   });
 
-  it('omits Allow writes when the OAuth ceiling is read-only', () => {
+  it('omits Read and write when the OAuth ceiling is read-only', () => {
     const html = renderConsentHtml({
       client,
       state: 'abc',
@@ -328,7 +330,7 @@ describe('renderConsentHtml', () => {
       grant: DEFAULT_GRANT,
     });
 
-    expect(html).toContain('Read-only');
+    expect(html).toContain('Read only');
     expect(html).not.toContain('class="scope-checkbox"');
     expect(html).toContain('name="scopes" value="read"');
   });
@@ -357,6 +359,6 @@ describe('renderConsentHtml', () => {
     expect(html).toContain('aria-invalid="true"');
     expect(html).toContain('autofocus');
     expect(html).toContain('role="alert"');
-    expect(html).toContain('data-category-summary>2 of 12 selected</span>');
+    expect(html).toContain('data-category-summary>2/12 selected · ');
   });
 });
