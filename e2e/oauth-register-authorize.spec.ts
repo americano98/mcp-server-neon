@@ -225,7 +225,7 @@ test.describe('OAuth register and authorize contract', () => {
     await page.locator('[data-category-disclosure] summary').click();
     await page.getByRole('button', { name: 'Included tools' }).click();
     const approve = page.getByRole('button', {
-      name: 'Submit',
+      name: 'Approve',
     });
     await expect(approve).toBeInViewport();
     await expect(page.locator('[data-tool-content]')).toHaveCSS(
@@ -297,7 +297,7 @@ test.describe('OAuth register and authorize contract', () => {
       authorizePath(registerBody, { state: 'e2e-cancel-after-error' }),
     );
     await page.getByText('One project', { exact: true }).click();
-    await page.getByRole('button', { name: 'Submit' }).click();
+    await page.getByRole('button', { name: 'Approve' }).click();
     await expect(
       page.getByText('Enter the project ID this connection should use.'),
     ).toBeVisible();

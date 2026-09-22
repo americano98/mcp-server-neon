@@ -361,14 +361,30 @@ function renderEditableGrant({
     fieldError?.field === 'projectId'
       ? ' aria-invalid="true" aria-describedby="project-id-error" autofocus'
       : '';
-  const categoryBoxes = SCOPE_CATEGORIES.map((category) => {
-    const checked = formState.categories.includes(category) ? ' checked' : '';
-    return `
+  const displayCategories = [
+    'projects',
+    'endpoints',
+    'schema',
+    'neon_auth',
+    'observability',
+    'functions',
+    'branches',
+    'snapshots',
+    'querying',
+    'data_api',
+    'docs',
+    'storage',
+  ] satisfies ScopeCategory[];
+  const categoryBoxes = displayCategories
+    .map((category) => {
+      const checked = formState.categories.includes(category) ? ' checked' : '';
+      return `
       <label class="check-option">
         <input type="checkbox" name="category" value="${category}"${checked} />
         <span>${he.escape(SCOPE_CATEGORY_LABELS[category])}</span>
       </label>`;
-  }).join('');
+    })
+    .join('');
 
   return `
     <section class="panel panel-access">
@@ -770,37 +786,39 @@ export function renderConsentHtml(props: ConsentDialogProps): string {
     }
     .consent-header {
       flex: 0 0 auto;
-      padding: 32px 32px 28px;
+      padding: 32px 28px 28px;
       border-bottom: 1px solid var(--line);
     }
-    .connection-icons { display: flex; align-items: center; gap: 4px; height: 44px; margin-bottom: 20px; }
-    .client-icon { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid #61646b; border-radius: 50%; }
+    .connection-icons { display: flex; align-items: center; gap: 2.44px; height: 40px; margin-bottom: 16px; }
+    .client-icon { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid #61646b; border-radius: 50%; }
     .connection-line { display: block; width: 22px; height: 2px; }
-    .brand { width: 35px; height: 35px; margin-left: 5px; }
-    h1 { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; margin: 0; font-size: 28px; line-height: 1.375; font-weight: 400; letter-spacing: -0.02em; color: #fff; overflow-wrap: anywhere; }
-    h2, .app-details-title, .permission-options legend { display: block; margin: 0 0 24px; padding: 0; font-size: 24px; font-weight: 400; }
-    h3, .choice legend, .choice-title { margin: 0 0 24px; padding: 0; font-size: 20px; font-weight: 400; }
+    .brand { width: 40px; height: 40px; }
+    h1 { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; margin: 0; font-size: 24px; line-height: 1.375; font-weight: 400; letter-spacing: -0.02em; color: #fff; overflow-wrap: anywhere; }
+    h2, .app-details-title, .permission-options legend { display: block; margin: 0 0 16px; padding: 0; font-size: 20px; font-weight: 400; }
+    h3, .choice legend, .choice-title { margin: 0 0 16px; padding: 0; font-size: 18px; font-weight: 400; }
+    .panel-requested h3 { margin-bottom: 20px; }
+    .panel-permissions h2 { margin-bottom: 10px; }
     .card-body {
       min-height: 0;
       min-width: 0;
       overflow-y: auto;
       overscroll-behavior: contain;
-      padding: 0 32px;
+      padding: 0 28px;
       scrollbar-width: thin;
       scrollbar-color: #494b50 transparent;
     }
     .card-body:focus-visible { outline: 1px solid var(--green); outline-offset: -1px; }
-    .client-verify { padding: 28px 0; border-bottom: 1px solid var(--line); }
+    .client-verify { padding: 24px 0 20px; border-bottom: 1px solid var(--line); }
     summary { cursor: pointer; list-style: none; }
     summary::-webkit-details-marker { display: none; }
-    .app-details-title { margin-bottom: 10px; }
+    .app-details-title { margin-bottom: 6px; }
     .client-summary { display: block; color: var(--muted); overflow-wrap: anywhere; }
     .client-meta { display: grid; gap: 12px; margin: 20px 0 0; font-size: 15px; }
     .client-meta > div { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 12px; }
     .client-uris { display: flex; flex-direction: column; gap: 8px; }
     .client-meta a { color: var(--text); text-underline-offset: 3px; }
-    .panel { padding: 28px 0; border-bottom: 1px solid var(--line); }
-    .panel-permissions { border-bottom: 0; }
+    .panel { padding: 20px 0; border-bottom: 1px solid var(--line); }
+    .panel-permissions { border-bottom: 0; padding-bottom: 28px; }
     .panel-requested { border-bottom-style: dashed; }
     .choice, .permission-options { min-width: 0; margin: 0; padding: 0; border: 0; }
     .check-option { display: flex; align-items: center; gap: 10px; width: fit-content; min-height: 21px; cursor: pointer; }
@@ -810,39 +828,43 @@ export function renderConsentHtml(props: ConsentDialogProps): string {
     .check-option input[type="radio"]:checked { border: 4px solid #39a57d; background: var(--card); }
     .check-option input[type="checkbox"]:checked { border-color: #39a57d; background: #39a57d url('/images/consent/check.svg') center / 12px 12px no-repeat; }
     .check-option:hover { color: #fff; }
-    .project-id { display: grid; gap: 8px; margin-top: 24px; }
+    .project-id { display: grid; gap: 8px; margin-top: 16px; }
     .project-id input { min-width: 0; width: 100%; height: 44px; padding: 11px 16px; border: 1px solid var(--line); border-radius: 0; background: var(--card); color: #fff; font-size: 16px; }
     .project-id input[aria-invalid="true"] { border-color: var(--danger); }
     .note, .field-error, .warning { color: var(--muted); font-size: 15px; margin: 8px 0 0; }
+    .note[data-project-id-help] { font-size: 14px; }
     .field-error { color: var(--danger); }
     .warning { padding: 12px; border: 1px solid var(--danger); }
-    .choice-categories { margin-top: 28px; padding-top: 28px; border-top: 1px dashed var(--line); }
+    .choice-categories { margin-top: 20px; padding-top: 20px; border-top: 1px dashed var(--line); }
     .category-disclosure-summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
     .category-disclosure-summary .choice-title { display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0; margin: 0; }
     .choice-title::after, .tool-toggle::after { content: ''; display: block; width: 20px; height: 20px; background: url('/images/consent/chevron.svg') center / contain no-repeat; }
     .choice-categories[open] .choice-title::after, .tool-toggle[aria-expanded="true"]::after { transform: rotate(180deg); }
     .category-summary, .tool-block-title { color: var(--muted); font-size: 15px; text-align: right; }
-    .category-disclosure-body { padding-top: 24px; }
+    .category-disclosure-body { padding-top: 20px; }
     .choice-actions { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
     .choice-action { border: 0; padding: 0; background: transparent; color: var(--green); font-size: 15px; }
     .choice-action + .choice-action { padding-left: 12px; border-left: 1px solid var(--line); }
     .choice-action:hover { color: #fff; }
-    .check-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 32px; }
+    .check-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(4, auto); grid-auto-flow: column; gap: 12px 32px; }
     .check-grid .check-option { min-width: 0; }
     .facts { display: grid; gap: 12px; margin: 0; }
-    .facts > div { display: grid; grid-template-columns: 38% minmax(0, 1fr); gap: 12px; }
+    .facts > div { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 32px; }
     dt, dd { margin: 0; overflow-wrap: anywhere; }
     dt { color: var(--muted); }
     .mono { overflow-wrap: anywhere; }
-    .connection-note { display: flex; align-items: flex-start; gap: 8px; padding: 12px; margin-top: 28px; border: 1px solid var(--line); background: #18191b; }
+    .connection-note { display: flex; align-items: flex-start; gap: 8px; padding: 12px 40px 12px 12px; margin-top: 28px; border: 1px solid var(--line); background: #18191b; }
     .connection-note img { flex-shrink: 0; margin-top: 1px; }
-    .panel-tools { padding: 28px 0; border-bottom: 1px solid var(--line); }
-    .choice-categories .panel-tools { padding: 28px 0 0; border: 0; }
+    .panel-tools { padding: 20px 0; border-bottom: 1px solid var(--line); }
+    .choice-categories .panel-tools { padding: 20px 0 0; border: 0; }
     .tool-block-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-    .tool-toggle { display: inline-flex; align-items: center; gap: 10px; padding: 0; border: 0; background: transparent; color: var(--text); font-size: 20px; }
+    .tool-toggle { display: inline-flex; align-items: center; gap: 10px; padding: 0; border: 0; background: transparent; color: var(--text); font-size: 18px; }
     .choice-categories .tool-toggle { font-size: 16px; }
     .tool-block.is-collapsed .tool-content { display: none; }
-    .tool-group { margin-top: 28px; }
+    .tool-content { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 28px; margin-top: 28px; }
+    .choice-categories .tool-content { margin-top: 20px; column-gap: 24px; }
+    .tool-group { min-width: 0; overflow-wrap: anywhere; }
+    .choice-categories .tool-list { gap: 10px; }
     .tool-group-label { color: var(--muted); margin-bottom: 12px; }
     .tool-list { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
     .write-badge { margin-left: 6px; color: var(--muted); font-size: 12px; }
@@ -854,12 +876,12 @@ export function renderConsentHtml(props: ConsentDialogProps): string {
     .write-help { position: absolute; z-index: 2; left: -24px; bottom: 28px; width: 309px; max-width: 52vw; padding: 16px; border: 1px solid var(--line); background: #18191b; color: var(--muted); visibility: hidden; }
     .write-info:hover .write-help, .write-info:focus-within .write-help { visibility: visible; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-    .card-foot { flex: 0 0 auto; padding: 19px 32px; border-top: 1px solid var(--line); background: var(--card); }
+    .card-foot { flex: 0 0 auto; padding: 19px 28px; border-top: 1px solid var(--line); background: var(--card); }
     .actions { display: flex; justify-content: flex-end; gap: 12px; }
-    .button { width: 152px; height: 40px; padding: 0 20px; border-radius: 33px; font-size: 16px; font-weight: 500; }
+    .button { width: 152px; height: 40px; padding: 0 20px; border-radius: 33px; font-size: 16px; line-height: 1; font-weight: 500; }
     .button-primary { border: 1px solid #fff; background: #fff; color: #000; }
     .button-primary:hover { background: #e4e5e7; border-color: #e4e5e7; }
-    .button-secondary { border: 1px solid #61646b; background: #111212; color: #fff; }
+    .button-secondary { border: 1px solid #61646b; background: rgba(255,255,255,0.02); color: #fff; }
     .button-secondary:hover { border-color: var(--text); }
     @media (max-width: 600px) {
       .page { padding: 56px 16px; }
@@ -872,9 +894,14 @@ export function renderConsentHtml(props: ConsentDialogProps): string {
       .category-summary { font-size: 13px; text-align: left; }
       .card-foot { padding: 16px 20px; }
       .button { flex: 1; max-width: 152px; width: auto; }
-      .check-grid { gap: 14px 16px; }
+      .check-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(6, auto); gap: 12px 16px; }
+      .facts > div { grid-template-columns: 38% minmax(0, 1fr); gap: 12px; }
+      .tool-content { grid-template-columns: 1fr; }
       .client-meta > div { grid-template-columns: 1fr; gap: 4px; }
       .write-help { left: -140px; max-width: 240px; }
+    }
+    @media (max-width: 380px) {
+      .check-grid { grid-template-columns: 1fr; grid-template-rows: none; grid-auto-flow: row; }
     }
     @media (max-height: 520px) {
       .page { overflow-y: auto; padding-right: 8px; padding-left: 8px; }
@@ -898,9 +925,9 @@ export function renderConsentHtml(props: ConsentDialogProps): string {
       <input type="hidden" name="state" value="${he.escape(props.state)}" />
       <header class="consent-header">
         <div class="connection-icons" aria-hidden="true">
-          <span class="client-icon"><img src="/images/consent/key.svg" alt="" width="20" height="20"></span>
+          <span class="client-icon"><img src="/images/consent/key.svg" alt="" width="18" height="18"></span>
           <img class="connection-line" src="/images/consent/dash.svg" alt="" width="22" height="2">
-          <img class="brand" src="/images/consent/neon.svg" alt="" width="35" height="35">
+          <img class="brand" src="/images/consent/neon.svg" alt="" width="40" height="40">
         </div>
         <h1 title="Connect ${clientName} to Neon">Connect ${clientName} to Neon</h1>
       </header>
@@ -917,7 +944,7 @@ export function renderConsentHtml(props: ConsentDialogProps): string {
       <div class="card-foot">
       <div class="actions">
         <button type="submit" class="button button-secondary" name="action" value="cancel" formnovalidate>Cancel</button>
-        <button type="submit" class="button button-primary" name="action" value="approve">Submit</button>
+        <button type="submit" class="button button-primary" name="action" value="approve">Approve</button>
       </div>
       </div>
     </form>

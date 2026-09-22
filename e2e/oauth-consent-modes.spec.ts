@@ -242,7 +242,9 @@ test.describe('OAuth consent modes', () => {
           : [],
       );
     expect(submittedCategories).toEqual(categoriesBeforeClose);
-    await expect(page.getByRole('button', { name: 'Submit' })).toBeInViewport();
+    await expect(
+      page.getByRole('button', { name: 'Approve' }),
+    ).toBeInViewport();
     const bodyBox = await page.locator('.card-body').boundingBox();
     const footBox = await page.locator('.card-foot').boundingBox();
     expect(bodyBox && footBox).toBeTruthy();
@@ -347,7 +349,7 @@ test.describe('OAuth consent modes', () => {
   }) => {
     await openAuthorize(page, request);
     await page.getByText('One project', { exact: true }).click();
-    await page.getByRole('button', { name: 'Submit' }).click();
+    await page.getByRole('button', { name: 'Approve' }).click();
     await expect(
       page.getByText('Enter the project ID this connection should use.'),
     ).toBeVisible();
@@ -369,7 +371,7 @@ test.describe('OAuth consent modes', () => {
     await page.locator('input[name="category"][value="querying"]').check();
     await page.locator('input[name="category"][value="schema"]').check();
     await page.getByRole('radio', { name: 'Read only', exact: true }).check();
-    await page.getByRole('button', { name: 'Submit' }).click();
+    await page.getByRole('button', { name: 'Approve' }).click();
     await expect(
       page.getByText('Enter the project ID this connection should use.'),
     ).toBeVisible();
@@ -587,10 +589,12 @@ test.describe('OAuth consent modes', () => {
       resource:
         'https://mcp.neon.tech/mcp?projectId=proj-example-with-a-very-long-identifier',
     });
-    await expect(page.getByRole('button', { name: 'Submit' })).toBeInViewport();
+    await expect(
+      page.getByRole('button', { name: 'Approve' }),
+    ).toBeInViewport();
     await capture(page, 'L1-confirmation-720');
     const approve = page.getByRole('button', {
-      name: 'Submit',
+      name: 'Approve',
     });
     await capture(page, 'L1-confirmation-720-actions');
     await page.setViewportSize({ width: 1280, height: 480 });
@@ -604,7 +608,7 @@ test.describe('OAuth consent modes', () => {
     await openCategoryDisclosure(page);
     await page.getByRole('button', { name: 'Included tools' }).click();
     const editableApprove = page.getByRole('button', {
-      name: 'Submit',
+      name: 'Approve',
     });
     await expect(editableApprove).toBeInViewport();
     await capture(page, 'L1-editable-720-actions');
@@ -625,13 +629,15 @@ test.describe('OAuth consent modes', () => {
     await capture(page, 'L2-mobile-landscape');
     await page.setViewportSize({ width: 320, height: 568 });
     const narrowApprove = page.getByRole('button', {
-      name: 'Submit',
+      name: 'Approve',
     });
     await expect(narrowApprove).toBeInViewport();
     await capture(page, 'L2-mobile-320px');
     await page.setViewportSize({ width: 390, height: 667 });
     await openAuthorize(page, request);
-    await expect(page.getByRole('button', { name: 'Submit' })).toBeInViewport();
+    await expect(
+      page.getByRole('button', { name: 'Approve' }),
+    ).toBeInViewport();
     await capture(page, 'L2-editable-mobile-portrait');
     await page.setViewportSize({ width: 667, height: 320 });
     expect(
@@ -639,11 +645,17 @@ test.describe('OAuth consent modes', () => {
         .locator('.card-body')
         .evaluate((element) => element.clientHeight),
     ).toBeGreaterThan(100);
-    await page.getByRole('button', { name: 'Submit' }).scrollIntoViewIfNeeded();
-    await expect(page.getByRole('button', { name: 'Submit' })).toBeInViewport();
+    await page
+      .getByRole('button', { name: 'Approve' })
+      .scrollIntoViewIfNeeded();
+    await expect(
+      page.getByRole('button', { name: 'Approve' }),
+    ).toBeInViewport();
     await capture(page, 'L2-editable-mobile-landscape');
     await page.setViewportSize({ width: 320, height: 568 });
-    await expect(page.getByRole('button', { name: 'Submit' })).toBeInViewport();
+    await expect(
+      page.getByRole('button', { name: 'Approve' }),
+    ).toBeInViewport();
     await capture(page, 'L2-editable-mobile-320px');
   });
 
@@ -661,7 +673,9 @@ test.describe('OAuth consent modes', () => {
     await page.goto(authorizePath(client));
 
     await expect(page.locator('h1')).toContainText(longName);
-    await expect(page.getByRole('button', { name: 'Submit' })).toBeInViewport();
+    await expect(
+      page.getByRole('button', { name: 'Approve' }),
+    ).toBeInViewport();
     const headingBox = await page.locator('h1').boundingBox();
     expect(headingBox).toBeTruthy();
     expect(headingBox?.height).toBeLessThan(80);
