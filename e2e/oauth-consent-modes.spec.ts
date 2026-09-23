@@ -24,6 +24,15 @@ async function openCategoryDisclosure(page: Page): Promise<void> {
   await expect(disclosure).toHaveAttribute('open', '');
 }
 
+async function submittedScopes(page: Page): Promise<string[]> {
+  return page.locator('#authorize-form').evaluate((form) => {
+    if (!(form instanceof HTMLFormElement)) {
+      throw new Error('missing consent form');
+    }
+    return new FormData(form).getAll('scopes').map(String);
+  });
+}
+
 test.describe('OAuth consent modes', () => {
   test('A1 fixed read-only confirmation when the client asked for writes', async ({
     page,
@@ -37,6 +46,7 @@ test.describe('OAuth consent modes', () => {
     await expect(page.locator('.facts')).toContainText('Querying');
     await expect(page.locator('.scope-checkbox')).toHaveCount(0);
     await expect(page.locator('[data-access-mode]')).toHaveText('Read only');
+    expect(await submittedScopes(page)).toEqual([]);
     await capture(page, 'A1-readonly-confirmation');
   });
 
@@ -49,6 +59,7 @@ test.describe('OAuth consent modes', () => {
       'Read and write',
     );
     await expect(page.locator('.scope-checkbox')).toHaveCount(0);
+    expect(await submittedScopes(page)).toEqual([]);
     await capture(page, 'A2-writable-confirmation');
   });
 
@@ -264,9 +275,11 @@ test.describe('OAuth consent modes', () => {
     request,
   }) => {
     await openAuthorize(page, request);
+    expect(await submittedScopes(page)).toEqual(['read', 'write']);
     await capture(page, 'B2-omitted-resource');
     await openAuthorize(page, request, {}, { 'x-read-only': 'true' });
     await expect(page.locator('.scope-checkbox')).not.toBeChecked();
+    expect(await submittedScopes(page)).toEqual(['read']);
     await capture(page, 'B2-legacy-readonly-header');
   });
 
@@ -277,6 +290,7 @@ test.describe('OAuth consent modes', () => {
     await openAuthorize(page, request, { scope: 'read' });
     await expect(page.locator('.scope-checkbox')).toHaveCount(0);
     await expect(page.locator('[data-access-mode]')).toHaveText('Read only');
+    expect(await submittedScopes(page)).toEqual(['read']);
     await capture(page, 'B3-editable-read-scope');
   });
 
@@ -306,10 +320,18 @@ test.describe('OAuth consent modes', () => {
     await expect(page.locator('[data-access-mode]')).toHaveText(
       'Read and write',
     );
+    expect(await submittedScopes(page)).toEqual(['read', 'write']);
     await clearScreenshotInteractionState(page);
     await capture(page, 'B4-subset-writes-on');
     await page.getByRole('radio', { name: 'Read only', exact: true }).check();
     await expect(page.locator('[data-access-mode]')).toHaveText('Read only');
+    expect(await submittedScopes(page)).toEqual(['read']);
+    await page
+      .getByRole('radio', { name: 'Read and write', exact: true })
+      .check();
+    expect(await submittedScopes(page)).toEqual(['read', 'write']);
+    await page.getByRole('radio', { name: 'Read only', exact: true }).check();
+    expect(await submittedScopes(page)).toEqual(['read']);
     await clearScreenshotInteractionState(page);
     await capture(page, 'B4-subset-writes-off');
   });
@@ -382,6 +404,7 @@ test.describe('OAuth consent modes', () => {
     );
     await expect(page.locator('.scope-checkbox')).not.toBeChecked();
     await expect(page.locator('input[name="category"]:checked')).toHaveCount(2);
+    expect(await submittedScopes(page)).toEqual(['read']);
     await openCategoryDisclosure(page);
 
     const toggle = page.getByRole('button', { name: 'Included tools' });

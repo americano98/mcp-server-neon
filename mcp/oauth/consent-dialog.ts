@@ -446,8 +446,10 @@ function renderScopeSection({
   includeReadScope: boolean;
 }): string {
   const mode = writeChecked ? 'Read and write' : 'Read only';
+  const hiddenReadDisabled =
+    showWriteControl && !writeChecked ? ' disabled' : '';
   const hiddenRead = includeReadScope
-    ? '<input type="hidden" name="scopes" value="read" />'
+    ? `<input type="hidden" name="scopes" value="read"${hiddenReadDisabled} />`
     : '';
   if (!showWriteControl) {
     return `
@@ -608,6 +610,14 @@ function consentScript(mode: ConsentMode): string {
       syncProjectField();
       var grant = currentGrant();
       var checked = writeChecked();
+      var writeControl = document.querySelector('.scope-checkbox');
+      var hiddenRead = document.querySelector('input[type="hidden"][name="scopes"][value="read"]');
+      if (
+        writeControl instanceof HTMLInputElement &&
+        hiddenRead instanceof HTMLInputElement
+      ) {
+        hiddenRead.disabled = !checked;
+      }
       var tools = filterCatalog(grant, checked);
       var categorySummary = document.querySelector('[data-category-summary]');
       if (categorySummary) {

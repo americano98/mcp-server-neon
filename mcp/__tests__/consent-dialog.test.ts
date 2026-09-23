@@ -259,6 +259,9 @@ describe('renderConsentHtml', () => {
     );
     expect(html).toContain('Read and write');
     expect(html).toContain(
+      '<input type="hidden" name="scopes" value="read" />',
+    );
+    expect(html).toContain(
       'Allow changes through tools in the selected project scope and categories shown above.',
     );
     expect(html).toContain('src="/images/consent/neon.svg"');
@@ -356,6 +359,9 @@ describe('renderConsentHtml', () => {
     });
 
     expect(html).toContain('Enter the project ID this connection should use.');
+    expect(html).toContain(
+      '<input type="hidden" name="scopes" value="read" disabled />',
+    );
     expect(html).toContain('aria-invalid="true"');
     expect(html).toContain('autofocus');
     expect(html).toContain('role="alert"');
