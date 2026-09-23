@@ -665,6 +665,16 @@ function consentScript(mode: ConsentMode): string {
       input.addEventListener('change', syncConsentUi);
       input.addEventListener('input', syncConsentUi);
     });
+    var categoryDisclosure = document.querySelector('[data-category-disclosure]');
+    if (categoryDisclosure instanceof HTMLDetailsElement) {
+      categoryDisclosure.addEventListener('toggle', function () {
+        if (!categoryDisclosure.open) return;
+        var firstCategory = categoryDisclosure.querySelector('input[name="category"]');
+        if (firstCategory instanceof HTMLInputElement) {
+          firstCategory.scrollIntoView({ block: 'nearest' });
+        }
+      });
+    }
     var toolToggle = document.querySelector('[data-tool-toggle]');
     var toolBlock = document.querySelector('[data-tools]');
     if (toolToggle && toolBlock) {

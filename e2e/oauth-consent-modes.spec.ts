@@ -230,7 +230,7 @@ test.describe('OAuth consent modes', () => {
         (element) =>
           getComputedStyle(element).gridTemplateColumns.split(' ').length,
       ),
-    ).toBe(2);
+    ).toBe(3);
     const lastCategory = page.locator('input[name="category"]').last();
     await lastCategory.focus();
     await expect(lastCategory).toBeFocused();
