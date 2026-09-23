@@ -85,11 +85,11 @@ function renderClientVerification(client: ConsentClient): string {
   let summary = website ? urlSummary(website) : '';
   if (redirects.length === 1) {
     const redirect = urlSummary(redirects[0]);
-    summary = website ? `${summary} / ${redirect}` : `Redirects to ${redirect}`;
+    summary = website ? `${summary} → ${redirect}` : `Redirects to ${redirect}`;
   } else if (redirects.length > 1) {
     const redirectHosts = [...new Set(redirects.map(urlSummary))].join(', ');
     summary = website
-      ? `${summary} / ${redirectHosts}`
+      ? `${summary} → ${redirectHosts}`
       : `Redirects to ${redirectHosts}`;
   }
   const websiteHtml = website

@@ -177,7 +177,7 @@ test.describe('OAuth consent modes', () => {
     const clientDetails = page.locator('details.client-verify');
     const clientSummary = clientDetails.locator('summary');
     await expect(clientSummary).toHaveText(
-      'App detailsexample.com / 127.0.0.1:55667',
+      'App detailsexample.com → 127.0.0.1:55667',
     );
     await expect(clientDetails).not.toHaveAttribute('open', '');
     await clientSummary.focus();

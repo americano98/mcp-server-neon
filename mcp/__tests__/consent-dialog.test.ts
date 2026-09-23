@@ -112,7 +112,7 @@ describe('renderConsentHtml', () => {
     });
 
     expect(html).toContain(
-      '<summary><span class="app-details-title">App details</span><span class="client-summary">cursor.com / 127.0.0.1:1</span></summary>',
+      '<summary><span class="app-details-title">App details</span><span class="client-summary">cursor.com → 127.0.0.1:1</span></summary>',
     );
     expect(html).toContain('<details class="client-verify">');
     expect(html).not.toContain('<details class="client-verify" open>');
@@ -139,7 +139,7 @@ describe('renderConsentHtml', () => {
     });
 
     expect(html).toContain(
-      '<summary><span class="app-details-title">App details</span><span class="client-summary">cursor.com / 127.0.0.1:1, cursor.com</span></summary>',
+      '<summary><span class="app-details-title">App details</span><span class="client-summary">cursor.com → 127.0.0.1:1, cursor.com</span></summary>',
     );
     expect(html).toContain('http://127.0.0.1:1/callback');
     expect(html).toContain('https://cursor.com/oauth/callback');
