@@ -313,7 +313,7 @@ describe('/api/authorize route integration', () => {
     expect(html).not.toContain('class="scope-checkbox"');
     expect(html).not.toContain('name="projectMode"');
     expect(html).toContain(
-      'To change these limits, update the connection URL and authorize again.',
+      'To change this access, update the connection URL and authorize again.',
     );
   });
 

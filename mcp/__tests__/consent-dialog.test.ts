@@ -225,11 +225,12 @@ describe('renderConsentHtml', () => {
     expect(html).toContain('Querying');
     expect(html).toContain('Read and write');
     expect(html).toContain('<h2>Requested access</h2>');
+    expect(html).not.toContain('<h3>Project</h3>');
     expect(html).not.toContain('class="scope-checkbox"');
     expect(html).not.toContain('name="projectMode"');
     expect(html).not.toContain('name="category"');
     expect(html).toContain(
-      'To change these limits, update the connection URL and authorize again.',
+      'To change this access, update the connection URL and authorize again.',
     );
     expect(html).toContain('name="action" value="cancel"');
     expect(html).toContain('formnovalidate');

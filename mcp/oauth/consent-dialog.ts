@@ -319,7 +319,6 @@ function renderGrantSummary(view: ConsentView): string {
   return `
     <section class="panel panel-requested">
       <h2>Requested access</h2>
-      <h3>Project</h3>
       <dl class="facts">
         <div>
           <dt>Project:</dt>
@@ -334,7 +333,7 @@ function renderGrantSummary(view: ConsentView): string {
       ${emptyGrantNote(view)}
       <p class="note connection-note">
         <img src="/images/consent/info-outline.svg" alt="" width="18" height="18">
-        To change these limits, update the connection URL and authorize again.
+        To change this access, update the connection URL and authorize again.
       </p>
     </section>`;
 }

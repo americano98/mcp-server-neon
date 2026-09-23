@@ -139,7 +139,7 @@ test.describe('OAuth register and authorize contract', () => {
     expect(body).toContain('proj-e2e');
     expect(body).toContain('Querying');
     expect(body).toContain(
-      'To change these limits, update the connection URL and authorize again.',
+      'To change this access, update the connection URL and authorize again.',
     );
     expect(body).not.toContain('class="scope-checkbox"');
     expect(body).not.toContain('name="projectMode"');
